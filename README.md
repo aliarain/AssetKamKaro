@@ -6,173 +6,198 @@
   <img alt="AssetKamKaro Logo" src="assets/logo.png" width="200" height="200">
 </picture>
 
-# AssetKamKaro 🚀
+# AssetKamKaro
 
-[![pub package](https://img.shields.io/pub/v/assetkamkaro.svg)](https://pub.dev/packages/assetkamkaro)
-[![likes](https://img.shields.io/pub/likes/assetkamkaro?logo=dart)](https://pub.dev/packages/assetkamkaro/score)
-[![popularity](https://img.shields.io/pub/popularity/assetkamkaro?logo=dart)](https://pub.dev/packages/assetkamkaro/score)
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-blue.svg)](https://flutter.dev)
+A powerful Flutter package for optimizing and managing assets in your Flutter project. AssetKamKaro helps reduce app size, improve loading times, and maintain clean asset management.
 
-A blazing fast 🔥 Flutter asset optimization package that helps you reduce your app size by compressing assets and removing unused ones. Built with performance in mind.
+## Features
 
-## Features 💫
+- 🚀 **Advanced Asset Optimization**
+  - Smart image compression with quality control
+  - Support for multiple formats (JPEG, PNG, WebP)
+  - Customizable compression settings
+  - Memory-efficient processing
 
-- 🎯 **Smart Asset Compression**
-  - Up to 70% size reduction while maintaining quality
-  - Supports PNG, JPEG, and font files (TTF/OTF)
-  - Intelligent compression algorithms
-  
-- 🔍 **Unused Asset Detection**
-  - Finds unused assets in your project
-  - Smart detection with regex patterns
-  - Configurable exclusion rules
-  
-- ⚡ **Lightning Fast Processing**
-  - Parallel processing for better performance
-  - Optimized for large projects
-  - Memory-efficient operations
+- 🔍 **Asset Analysis**
+  - Detailed asset usage analysis
+  - Unused asset detection
+  - Size reduction reporting
+  - Performance metrics
 
-- 🎮 **Easy-to-use CLI**
-  - Simple commands
-  - Configurable options
-  - Progress tracking
+- ⚡ **Performance**
+  - Parallel processing for faster optimization
+  - Memory-efficient algorithms
+  - Asset caching system
+  - Progress reporting
 
-## Installation 📦
+- 🛠️ **Developer Tools**
+  - Command-line interface (CLI)
+  - Configuration file support
+  - Backup functionality
+  - Comprehensive error handling
 
-Add to your `pubspec.yaml`:
+## Installation
 
-```yaml
-dev_dependencies:
-  assetkamkaro: ^1.0.0
-```
-
-Or install via command line:
-
-```bash
-flutter pub add --dev assetkamkaro
-```
-
-## Quick Start 🚀
-
-1. **Basic Usage**
-
-```bash
-flutter pub run assetkamkaro optimize
-```
-
-2. **With Options**
-
-```bash
-flutter pub run assetkamkaro optimize --compression=high --exclude=assets/fonts
-```
-
-## Advanced Usage 🛠️
-
-### 1. Configuration File
-
-Create `.assetkamkaro.yaml` in your project root:
+Add AssetKamKaro to your `pubspec.yaml`:
 
 ```yaml
-compression: medium  # low, medium, high
-exclude:
-  - assets/icons/
-  - assets/fonts/
-report_path: reports/assets.json
-dry_run: false
-delete_unused: false
+dependencies:
+  assetkamkaro: ^0.1.0
 ```
 
-### 2. Compression Levels
-
+Then run:
 ```bash
-# Low compression (90% quality)
-flutter pub run assetkamkaro optimize --compression=low
-
-# Medium compression (85% quality)
-flutter pub run assetkamkaro optimize --compression=medium
-
-# High compression (78% quality)
-flutter pub run assetkamkaro optimize --compression=high
+flutter pub get
 ```
 
-### 3. Asset Validation
+## Usage
 
-```bash
-# Find unused assets
-flutter pub run assetkamkaro validate
-
-# Find and delete unused assets
-flutter pub run assetkamkaro validate --delete
-
-# Generate detailed report
-flutter pub run assetkamkaro validate --report
-```
-
-### 4. Programmatic Usage
+### Basic Usage
 
 ```dart
 import 'package:assetkamkaro/assetkamkaro.dart';
 
 void main() async {
-  final compressor = AssetCompressor();
-  
-  // Compress single image
-  final result = await compressor.compressImage(
-    inputFile: 'assets/image.png',
-    outputFile: 'assets/image_compressed.png',
-    level: 'medium',
+  final optimizer = AssetKamKaro();
+  final result = await optimizer.optimize(
+    projectPath: 'path/to/your/flutter/project',
+    compressionLevel: CompressionLevel.medium,
   );
   
-  print('Reduced size by ${result.reduction}%');
-  
-  // Validate assets
-  final validator = AssetValidator();
-  final unusedAssets = await validator.findUnusedAssets(
-    projectPath: '.',
-    exclude: ['assets/fonts'],
-  );
-  
-  print('Found ${unusedAssets.length} unused assets');
+  print('Optimization complete!');
+  print('Total size reduction: ${result.totalSizeReduction}');
+  print('Unused assets found: ${result.unusedAssets.length}');
 }
 ```
 
-## Performance Tips 🎯
+### Command Line Interface
 
-1. **Use Appropriate Compression Levels**
-   - `low`: For high-quality images (logos, hero images)
-   - `medium`: For general assets
-   - `high`: For background images and textures
+```bash
+# Basic optimization
+dart run assetkamkaro optimize
 
-2. **Exclude Unnecessary Directories**
-   ```bash
-   flutter pub run assetkamkaro optimize --exclude=test,assets/raw
-   ```
+# With specific compression level
+dart run assetkamkaro optimize --compression high
 
-3. **Batch Processing**
-   ```bash
-   flutter pub run assetkamkaro optimize --batch-size=10
-   ```
+# Dry run to analyze without making changes
+dart run assetkamkaro optimize --dry-run
 
-## Benchmarks 📊
+# Delete unused assets
+dart run assetkamkaro optimize --delete-unused
 
-| Asset Type | Original Size | Compressed Size | Reduction |
-|------------|--------------|-----------------|-----------|
-| PNG Images | 1.0 MB       | 300 KB         | 70%       |
-| JPEG Images| 2.0 MB       | 700 KB         | 65%       |
-| Fonts (TTF)| 1.5 MB       | 900 KB         | 40%       |
+# Exclude specific directories
+dart run assetkamkaro optimize --exclude assets/icons,assets/backgrounds
+```
 
-## Contributing 🤝
+### Configuration
 
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md).
+Create a `config.yaml` file in your project root:
 
-## License 📄
+```yaml
+compression:
+  level: high
+  jpeg:
+    quality: 80
+    subsampling: yuv420
+  png:
+    level: 9
+    filter: 0
 
-MIT License - see the [LICENSE](LICENSE) file for details.
+exclude:
+  - assets/icons
+  - assets/backgrounds
 
-## Author ✨
+backup: true
+delete_unused: false
+```
 
-Built with 💙 by [Ali Arain](https://github.com/aliarain)
+## API Reference
 
----
+### AssetKamKaro
 
-If you find this package helpful, please give it a ⭐️ on [GitHub](https://github.com/aliarain/assetkamkaro)!
+The main class for asset optimization.
+
+```dart
+class AssetKamKaro {
+  /// Creates a new AssetKamKaro instance
+  AssetKamKaro({
+    String? configPath,
+    bool enableCache = true,
+  });
+
+  /// Optimizes assets in the specified project
+  Future<OptimizationResult> optimize({
+    required String projectPath,
+    CompressionLevel compressionLevel = CompressionLevel.medium,
+    bool dryRun = false,
+    bool createBackup = true,
+    List<String> excludePatterns = const [],
+    bool deleteUnused = false,
+  });
+}
+```
+
+### CompressionLevel
+
+Enum defining compression levels:
+
+```dart
+enum CompressionLevel {
+  low,    // Minimal compression, highest quality
+  medium, // Balanced compression and quality
+  high,   // Maximum compression, lower quality
+}
+```
+
+### OptimizationResult
+
+Result of the optimization process:
+
+```dart
+class OptimizationResult {
+  final int totalSizeReduction;
+  final int totalAssetsProcessed;
+  final List<String> unusedAssets;
+  final Map<String, CompressionResult> compressionResults;
+}
+```
+
+## Best Practices
+
+1. **Backup Your Assets**
+   - Always enable backup when running optimization
+   - Keep a copy of original assets in version control
+
+2. **Compression Settings**
+   - Use medium compression for most cases
+   - Test high compression on a subset of images first
+   - Consider using different settings for different asset types
+
+3. **Asset Organization**
+   - Keep assets in well-organized directories
+   - Use meaningful file names
+   - Document asset usage in code
+
+4. **Performance**
+   - Run optimization during CI/CD pipeline
+   - Cache optimization results
+   - Monitor app size changes
+
+## Contributing
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you find a bug or have a feature request, please [open an issue](https://github.com/yourusername/assetkamkaro/issues).
+
+## Acknowledgments
+
+- [image](https://pub.dev/packages/image) package for image processing
+- [path](https://pub.dev/packages/path) package for path handling
+- [yaml](https://pub.dev/packages/yaml) package for configuration
+- [args](https://pub.dev/packages/args) package for CLI support
