@@ -1,0 +1,114 @@
+# AssetKamKaro Examples
+
+This directory contains examples of how to use AssetKamKaro in different scenarios.
+
+## Basic Usage
+
+### 1. Command Line Interface (CLI)
+
+The simplest way to use AssetKamKaro is through the CLI:
+
+```bash
+# Basic usage
+dart run assetkamkaro:optimize
+
+# With compression level
+dart run assetkamkaro:optimize --compression=high
+
+# Dry run to see what would be done
+dart run assetkamkaro:optimize --dry-run
+
+# Create backup before making changes
+dart run assetkamkaro:optimize --backup
+
+# Exclude specific files/directories
+dart run assetkamkaro:optimize --exclude=assets/icons,assets/raw
+
+# Use custom configuration
+dart run assetkamkaro:optimize --config=config.yaml
+```
+
+### 2. Programmatic Usage
+
+You can also use AssetKamKaro programmatically in your Dart code:
+
+```dart
+import 'package:assetkamkaro/assetkamkaro.dart';
+import 'dart:io';
+
+void main() async {
+  // Create an instance with default settings
+  final optimizer = AssetKamKaro(
+    enableParallelProcessing: true,
+    enableCache: true,
+  );
+
+  // Run optimization with custom settings
+  final result = await optimizer.optimize(
+    projectPath: Directory.current.path,
+    compressionLevel: 'high',
+    dryRun: false,
+    backup: true,
+    exclude: 'assets/icons,assets/raw',
+  );
+
+  // Print results
+  print('Optimization complete!');
+  print('Processed files: ${result.processedFiles}');
+  print('Total bytes saved: ${result.totalSaved}');
+  print('Duration: ${result.duration.inSeconds} seconds');
+  
+  if (result.unusedAssets.isNotEmpty) {
+    print('\nUnused assets found:');
+    for (final asset in result.unusedAssets) {
+      print('- $asset');
+    }
+  }
+}
+```
+
+### 3. Configuration File
+
+You can create a configuration file (`config.yaml`) to customize the behavior:
+
+```yaml
+compression: high
+backup: true
+exclude: assets/icons,assets/raw
+```
+
+Then use it with:
+```bash
+dart run assetkamkaro:optimize --config=config.yaml
+```
+
+## Common Use Cases
+
+1. **Optimize All Assets**
+```bash
+dart run assetkamkaro:optimize --compression=high
+```
+
+2. **Find Unused Assets**
+```bash
+dart run assetkamkaro:optimize --dry-run
+```
+
+3. **Optimize with Backup**
+```bash
+dart run assetkamkaro:optimize --compression=high --backup
+```
+
+4. **Exclude Specific Assets**
+```bash
+dart run assetkamkaro:optimize --exclude=assets/icons,assets/raw
+```
+
+## Best Practices
+
+1. Always use `--dry-run` first to see what changes will be made
+2. Use `--backup` when making significant changes
+3. Start with medium compression and adjust based on results
+4. Use configuration files for complex setups
+5. Enable parallel processing for faster optimization
+6. Enable caching to speed up repeated optimizations 

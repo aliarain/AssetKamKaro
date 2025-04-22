@@ -1,0 +1,37 @@
+# AssetKamKaro Configuration File
+# This file contains settings for asset optimization
+
+# Compression level: low, medium, high
+compression: high
+
+# Create backup of original files before optimization
+backup: true
+
+# Comma-separated list of directories to exclude from optimization
+# Example: assets/icons,assets/raw,assets/keep_original
+exclude: assets/icons,assets/raw
+
+# Enable parallel processing for faster optimization
+parallel_processing: true
+
+# Enable caching of processed assets
+enable_cache: true
+
+# Custom compression settings for specific formats
+compression_settings:
+  # JPEG quality (0-100)
+  jpeg_quality: 80
+  
+  # PNG compression level (0-9)
+  png_compression: 9
+  
+  # WebP quality (0-100)
+  webp_quality: 80
+
+# Memory settings for large files
+memory_settings:
+  # Enable memory-efficient processing for large files
+  efficient_processing: true
+  
+  # Chunk size in bytes (default: 1MB)
+  chunk_size: 1048576 
