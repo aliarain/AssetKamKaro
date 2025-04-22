@@ -1,5 +1,37 @@
 # Changelog
 
+## [0.1.0] - 2024-03-21
+
+### Added
+- Initial release of AssetKamKaro
+- Basic asset optimization functionality
+- Command-line interface
+- Configuration support
+- Progress reporting
+- Asset analysis
+- Unused asset detection
+- Cache management
+- Worker pool for parallel processing
+
+### Changed
+- Improved compression algorithms
+- Enhanced error handling
+- Better type safety
+- Updated documentation
+- Optimized performance
+
+### Fixed
+- Fixed linter warnings
+- Removed unused imports
+- Corrected import paths
+- Fixed type issues
+- Added missing dependencies
+
+### Security
+- Added proper error handling
+- Improved file operations safety
+- Enhanced cache management
+
 ## [1.0.0] - 2024-04-22
 ### Added
 - Initial production release of AssetKamKaro

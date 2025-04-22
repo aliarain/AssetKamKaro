@@ -52,7 +52,6 @@ class AssetKamKaro {
     final stopwatch = Stopwatch()..start();
     final analysis = await _validator.analyzeAssets(projectPath);
     final assets = analysis.assets;
-    final quality = _compressor.getQualityForLevel(compressionLevel);
 
     _reporter.start(assets.length);
     int processedCount = 0;
