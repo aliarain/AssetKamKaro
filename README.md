@@ -1,36 +1,28 @@
-<div align="center">
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/logo_dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="assets/logo.svg">
-  <img alt="AssetKamKaro Logo" src="assets/logo.png" width="200" height="200">
-</picture>
-
 # AssetKamKaro
 
 A powerful Flutter package for optimizing and managing assets in your Flutter project. AssetKamKaro helps reduce app size, improve loading times, and maintain clean asset management.
 
 ## Features
 
-- 🚀 **Advanced Asset Optimization**
+- **Advanced Asset Optimization**
   - Smart image compression with quality control
   - Support for multiple formats (JPEG, PNG, WebP)
   - Customizable compression settings
   - Memory-efficient processing
 
-- 🔍 **Asset Analysis**
+- **Asset Analysis**
   - Detailed asset usage analysis
   - Unused asset detection
   - Size reduction reporting
   - Performance metrics
 
-- ⚡ **Performance**
+- **Performance**
   - Parallel processing for faster optimization
   - Memory-efficient algorithms
   - Asset caching system
   - Progress reporting
 
-- 🛠️ **Developer Tools**
+- **Developer Tools**
   - Command-line interface (CLI)
   - Configuration file support
   - Backup functionality
