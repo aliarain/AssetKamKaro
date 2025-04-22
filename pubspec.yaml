@@ -1,10 +1,13 @@
 name: assetkamkaro
-description: A Flutter package for optimizing and managing assets in your Flutter project.
-version: 0.1.0
-homepage: https://github.com/yourusername/assetkamkaro
+description: A powerful Flutter package for optimizing and managing assets in your Flutter project. Helps reduce app size, improve loading times, and maintain clean asset management.
+version: 0.1.1
+homepage: https://github.com/aliarain/assetkamkaro
+repository: https://github.com/aliarain/assetkamkaro.git
+issue_tracker: https://github.com/aliarain/assetkamkaro/issues
+documentation: https://github.com/aliarain/assetkamkaro#readme
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.0.0"
 
 dependencies:
@@ -24,6 +27,21 @@ dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.4.8
   json_serializable: ^6.7.1
+
+topics:
+  - flutter
+  - assets
+  - optimization
+  - compression
+  - performance
+
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

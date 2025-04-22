@@ -12,7 +12,6 @@ void main() async {
 
   // Create optimizer with default settings
   final optimizer = AssetKamKaro(
-    enableParallelProcessing: true,
     enableCache: true,
   );
 
@@ -20,17 +19,17 @@ void main() async {
     // Run optimization with custom settings
     final result = await optimizer.optimize(
       projectPath: Directory.current.path,
-      compressionLevel: 'high',
+      compressionLevel: CompressionLevel.high,
       dryRun: false,
-      backup: true,
-      exclude: 'assets/icons,assets/raw',
+      createBackup: true,
+      excludePatterns: ['assets/icons', 'assets/raw'],
     );
 
     // Print results
     print('\nOptimization complete!');
-    print('Processed files: ${result.processedFiles}');
-    print('Total bytes saved: ${result.totalSaved}');
-    print('Duration: ${result.duration.inSeconds} seconds');
+    print('Total assets processed: ${result.totalAssetsProcessed}');
+    print(
+        'Total size reduction: ${(result.totalSizeReduction / 1024).toStringAsFixed(2)} KB');
 
     if (result.unusedAssets.isNotEmpty) {
       print('\nUnused assets found:');

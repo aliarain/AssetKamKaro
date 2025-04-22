@@ -1,10 +1,24 @@
 # Changelog
 
+## [0.1.1] - 2024-03-21
+
+### Fixed
+- Fixed example code to match actual API
+- Removed duplicate CompressionResult class definition
+- Corrected parameter names in optimize method
+- Updated result properties to match OptimizationResult class
+
+### Changed
+- Improved error handling in compression process
+- Enhanced documentation for public APIs
+- Updated example to use proper CompressionLevel enum
+- Standardized parameter naming across the package
+
 ## [0.1.0] - 2024-03-21
 
 ### Added
 - Initial release of AssetKamKaro
-- Basic asset optimization functionality
+- Asset optimization functionality
 - Command-line interface
 - Configuration support
 - Progress reporting
@@ -28,9 +42,9 @@
 - Added missing dependencies
 
 ### Security
-- Added proper error handling
-- Improved file operations safety
-- Enhanced cache management
+- Improved error handling
+- Enhanced file operations safety
+- Better cache management
 
 ## [1.0.0] - 2024-04-22
 ### Added

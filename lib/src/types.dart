@@ -21,69 +21,108 @@ class AssetProcessingResult {
   final double reductionPercentage;
 }
 
-/// Represents the overall result of an optimization run.
-class OptimizationResult {
-  /// Creates a new [OptimizationResult].
-  const OptimizationResult({
-    required this.processedFiles,
-    required this.totalSaved,
-    required this.duration,
-    required this.unusedAssets,
-  });
+/// Enum representing different compression levels for image optimization.
+enum CompressionLevel {
+  /// Low compression, minimal quality loss
+  low,
 
-  /// Number of files processed.
-  final int processedFiles;
+  /// Medium compression, balanced quality and size
+  medium,
 
-  /// Total bytes saved across all files.
-  final int totalSaved;
-
-  /// Time taken for optimization.
-  final Duration duration;
-
-  /// List of unused assets found during optimization.
-  final List<String> unusedAssets;
-
-  /// Returns a human-readable string representation.
-  @override
-  String toString() {
-    final savedMB = (totalSaved / (1024 * 1024)).toStringAsFixed(2);
-    return '''
-Optimization complete:
-- Files processed: $processedFiles
-- Total size saved: $savedMB MB
-- Time taken: ${duration.inSeconds} seconds
-- Unused assets found: ${unusedAssets.length}
-''';
-  }
+  /// High compression, maximum size reduction
+  high
 }
 
-/// Asset analysis result.
-class AssetAnalysis {
-  /// Creates a new [AssetAnalysis].
-  const AssetAnalysis({required this.assets, required this.unusedAssets});
+/// Represents metadata for an asset file.
+class AssetMetadata {
+  /// The path to the asset relative to the project root.
+  final String path;
 
+  /// The type of asset (e.g., 'image', 'font', etc.).
+  final String type;
+
+  /// The size of the asset in bytes.
+  final int size;
+
+  /// Creates a new [AssetMetadata] instance.
+  const AssetMetadata({
+    required this.path,
+    required this.type,
+    required this.size,
+  });
+}
+
+/// Represents the result of analyzing assets in a project.
+class AssetAnalysis {
   /// Map of asset paths to their metadata.
   final Map<String, AssetMetadata> assets;
 
   /// List of unused asset paths.
   final List<String> unusedAssets;
+
+  /// Creates a new [AssetAnalysis] instance.
+  const AssetAnalysis({
+    required this.assets,
+    required this.unusedAssets,
+  });
 }
 
-/// Metadata about an asset.
-class AssetMetadata {
-  /// Creates new [AssetMetadata].
-  const AssetMetadata({
-    required this.path,
-    required this.size,
-    required this.type,
+/// Result of a compression operation.
+class CompressionResult {
+  /// Creates a new compression result.
+  const CompressionResult({
+    required this.originalSize,
+    required this.compressedSize,
+    required this.reduction,
   });
 
-  /// Path to the asset relative to project root.
-  final String path;
+  /// Original size in bytes.
+  final int originalSize;
 
-  /// Size of the asset in bytes.
-  final int size;
+  /// Compressed size in bytes.
+  final int compressedSize;
 
-  /// Type of asset (e.g., 'image', 'font').
-  final String type;
+  /// Percentage reduction in size.
+  final double reduction;
+
+  @override
+  String toString() {
+    return '''
+Original Size: ${(originalSize / 1024).toStringAsFixed(2)} KB
+Compressed Size: ${(compressedSize / 1024).toStringAsFixed(2)} KB
+Reduction: ${reduction.toStringAsFixed(2)}%
+''';
+  }
+}
+
+/// Represents the result of optimizing assets in a project.
+class OptimizationResult {
+  /// Total size reduction in bytes.
+  final int totalSizeReduction;
+
+  /// Total number of assets processed.
+  final int totalAssetsProcessed;
+
+  /// List of unused assets found.
+  final List<String> unusedAssets;
+
+  /// Map of asset paths to their compression results.
+  final Map<String, CompressionResult> compressionResults;
+
+  /// Creates a new [OptimizationResult] instance.
+  const OptimizationResult({
+    required this.totalSizeReduction,
+    required this.totalAssetsProcessed,
+    required this.unusedAssets,
+    required this.compressionResults,
+  });
+
+  @override
+  String toString() {
+    final kbSaved = totalSizeReduction / 1024;
+    return 'Optimization complete!\n'
+        'Total assets processed: $totalAssetsProcessed\n'
+        'Total size reduction: ${kbSaved.toStringAsFixed(2)} KB\n'
+        'Unused assets found: ${unusedAssets.length}';
+  }
 }

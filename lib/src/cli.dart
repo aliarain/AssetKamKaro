@@ -1,122 +1,98 @@
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:path/path.dart' as path;
 import 'package:yaml/yaml.dart';
 import '../assetkamkaro.dart';
 import 'types.dart';
 
-/// Command-line interface for the AssetKamKaro package.
+/// Command-line interface for AssetKamKaro.
 class AssetKamKaroCli {
-  /// Creates a new [AssetKamKaroCli].
-  const AssetKamKaroCli();
+  final ArgParser _parser;
 
-  /// Runs the CLI with the given arguments.
-  Future<void> run(List<String> args) async {
-    final parser =
-        ArgParser()
-          ..addOption(
-            'compression',
-            abbr: 'c',
-            defaultsTo: 'medium',
-            allowed: ['low', 'medium', 'high'],
-            help: 'Compression level (low, medium, high)',
-          )
-          ..addFlag(
-            'dry-run',
-            abbr: 'd',
-            defaultsTo: false,
-            help: 'Simulate optimization without making changes',
-          )
-          ..addFlag(
-            'backup',
-            abbr: 'b',
-            defaultsTo: true,
-            help: 'Create backups of original files',
-          )
-          ..addOption(
-            'exclude',
-            abbr: 'e',
-            help: 'Comma-separated list of directories to exclude',
-          )
-          ..addFlag(
-            'delete',
-            abbr: 'D',
-            defaultsTo: false,
-            help: 'Delete unused assets instead of just reporting them',
-          )
-          ..addOption('config', abbr: 'C', help: 'Path to configuration file');
-
-    try {
-      final results = parser.parse(args);
-      final config = await _loadConfig(results['config'] as String?);
-
-      final optimizer = AssetKamKaro(
-        enableParallelProcessing: config['parallel'] ?? true,
-        enableCache: config['cache'] ?? true,
+  AssetKamKaroCli() : _parser = ArgParser() {
+    _parser
+      ..addOption(
+        'compression',
+        abbr: 'c',
+        help: 'Compression level (low, medium, high)',
+        defaultsTo: 'medium',
+      )
+      ..addFlag(
+        'dry-run',
+        abbr: 'd',
+        help: 'Analyze without making changes',
+        defaultsTo: false,
+      )
+      ..addFlag(
+        'backup',
+        abbr: 'b',
+        help: 'Create backup before optimization',
+        defaultsTo: true,
+      )
+      ..addMultiOption(
+        'exclude',
+        abbr: 'e',
+        help: 'Directories to exclude from optimization',
+        defaultsTo: const [],
+      )
+      ..addFlag(
+        'delete-unused',
+        abbr: 'D',
+        help: 'Delete unused assets',
+        defaultsTo: false,
+      )
+      ..addOption(
+        'config',
+        help: 'Path to configuration file',
+        defaultsTo: 'config.yaml',
       );
+  }
 
+  Future<void> run(List<String> arguments) async {
+    try {
+      final results = _parser.parse(arguments);
+      final config = await _loadConfig(results['config'] as String);
+
+      final optimizer = AssetKamKaro();
       final result = await optimizer.optimize(
         projectPath: Directory.current.path,
-        compressionLevel: results['compression'] as String,
+        compressionLevel:
+            _parseCompressionLevel(results['compression'] as String),
         dryRun: results['dry-run'] as bool,
-        backup: results['backup'] as bool,
-        exclude: results['exclude'] as String?,
+        createBackup: results['backup'] as bool,
+        excludePatterns: results['exclude'] as List<String>,
+        deleteUnused: results['delete-unused'] as bool,
       );
 
-      print(result.toString());
-
-      if (results['delete'] as bool) {
-        await _deleteUnusedAssets(result.unusedAssets);
-      }
+      print(result);
     } catch (e) {
       print('Error: $e');
-      print('\nUsage:');
-      print(parser.usage);
+      print(_parser.usage);
       exit(1);
     }
   }
 
-  /// Loads configuration from a YAML file.
-  Future<Map<String, dynamic>> _loadConfig(String? configPath) async {
-    final defaultConfig = {
-      'parallel': true,
-      'cache': true,
-      'compression': 'medium',
-      'exclude': ['test/', 'example/'],
-    };
-
-    if (configPath == null) {
-      return defaultConfig;
-    }
-
-    final file = File(configPath);
-    if (!file.existsSync()) {
-      return defaultConfig;
-    }
-
+  Future<Map<String, dynamic>> _loadConfig(String configPath) async {
     try {
-      final content = await file.readAsString();
-      final yaml = loadYaml(content) as YamlMap;
-      return {
-        'parallel': yaml['parallel'] ?? defaultConfig['parallel'],
-        'cache': yaml['cache'] ?? defaultConfig['cache'],
-        'compression': yaml['compression'] ?? defaultConfig['compression'],
-        'exclude': yaml['exclude'] ?? defaultConfig['exclude'],
-      };
+      final file = File(configPath);
+      if (await file.exists()) {
+        final content = await file.readAsString();
+        return loadYaml(content) as Map<String, dynamic>;
+      }
     } catch (e) {
-      print('Warning: Failed to load config file: $e');
-      return defaultConfig;
+      print('Warning: Could not load config file: $e');
     }
+    return {};
   }
 
-  /// Deletes unused assets.
-  Future<void> _deleteUnusedAssets(List<String> unusedAssets) async {
-    for (final asset in unusedAssets) {
-      final file = File(asset);
-      if (file.existsSync()) {
-        await file.delete();
-        print('Deleted unused asset: $asset');
-      }
+  CompressionLevel _parseCompressionLevel(String level) {
+    switch (level.toLowerCase()) {
+      case 'low':
+        return CompressionLevel.low;
+      case 'high':
+        return CompressionLevel.high;
+      case 'medium':
+      default:
+        return CompressionLevel.medium;
     }
   }
 }

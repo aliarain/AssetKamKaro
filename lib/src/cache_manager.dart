@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as path;
 
 /// Manages caching of processed assets to avoid reprocessing.
@@ -58,8 +57,8 @@ class CacheManager {
     final cacheFile = File(path.join(_cacheDir, 'cache.json'));
     if (await cacheFile.exists()) {
       final content = await cacheFile.readAsString();
-      // Parse the cache content
-      // Implementation depends on how the cache is stored
+      // TODO: Implement cache parsing logic
+      print('Cache loaded: $content');
     }
   }
 
